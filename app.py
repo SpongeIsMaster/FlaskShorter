@@ -1,5 +1,4 @@
-from os import link
-from flask import Flask, redirect, render_template, url_for, request
+from flask import Flask, redirect, render_template, request, url_for
 
 app = Flask(__name__)
 
@@ -11,7 +10,6 @@ id = 0
 def home():
     global link, links, id, short_url
     if request.method == "POST":
-        
         id = id + 1
         links.append((id, request.form["long-url"]))
         short_url = f"http://127.0.0.1:5000/shortener/{id}"
@@ -23,11 +21,11 @@ def home():
 def succes():
     global short_url
     print(links)
-    return render_template("succes.html", link = short_url, id = id)
+    return render_template("succes.html", link = short_url)
 
 @app.route("/shortener/<id>")
-def findAress():
-    return redirect(url_list(links[id - 1][1]))
+def findAress(id):
+    return redirect(links[int(id) - 1][1])
 
 if __name__ == "__main__":
     app.run(debug=True)
